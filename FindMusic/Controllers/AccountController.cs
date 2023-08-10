@@ -1,3 +1,4 @@
+using FindMusic.Extensions;
 using FindMusic.Models;
 using FindMusic.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -196,6 +197,46 @@ namespace FindMusic.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.UserName = model.Username;
+            user.DOB = model.DOB;
+
+            string? oldFilePath = null;
+
+            if (model.Photo != null)
+            {
+                oldFilePath = user.PhotoPath;
+                user.PhotoPath = model.Photo.ProcessUploadedFile(_hostEnvironment);
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View(model);
+            }
+
+            oldFilePath?.DeleteImageFile(_hostEnvironment);
+
+            return RedirectToAction("Details", new { username = user.UserName });
         }
     }
 }
