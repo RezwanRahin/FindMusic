@@ -53,5 +53,12 @@ namespace FindMusic.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
     }
 }
