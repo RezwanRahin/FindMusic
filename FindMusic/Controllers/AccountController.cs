@@ -25,6 +25,14 @@ namespace FindMusic.Controllers
             return user == null ? Json(true) : Json($"Email {email} is already in use");
         }
 
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public Task<IActionResult> IsEmailOfOther(string email, string id)
+        {
+            var result = _userManager.Users.Any(u => u.Email == email && u.Id != id);
+            return Task.FromResult<IActionResult>(result ? Json($"Email {email} is already in use") : Json(true));
+        }
+
         public IActionResult Index()
         {
             return RedirectToAction("Index", "Home");
