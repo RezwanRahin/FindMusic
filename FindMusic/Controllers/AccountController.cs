@@ -41,6 +41,14 @@ namespace FindMusic.Controllers
             return user == null ? Json(true) : Json($"Username '{username}' is already in use");
         }
 
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public Task<IActionResult> IsUsernameOfOther(string username, string id)
+        {
+            var result = _userManager.Users.Any(u => u.UserName == username && u.Id != id);
+            return Task.FromResult<IActionResult>(result ? Json($"Username '{username}' is already in use") : Json(true));
+        }
+
         public IActionResult Index()
         {
             return RedirectToAction("Index", "Home");
