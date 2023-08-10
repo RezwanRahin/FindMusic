@@ -95,5 +95,12 @@ namespace FindMusic.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
     }
 }
