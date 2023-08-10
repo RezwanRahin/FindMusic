@@ -33,6 +33,14 @@ namespace FindMusic.Controllers
             return Task.FromResult<IActionResult>(result ? Json($"Email {email} is already in use") : Json(true));
         }
 
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IsUsernameInUse(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user == null ? Json(true) : Json($"Username '{username}' is already in use");
+        }
+
         public IActionResult Index()
         {
             return RedirectToAction("Index", "Home");
