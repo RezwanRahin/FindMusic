@@ -238,5 +238,12 @@ namespace FindMusic.Controllers
 
             return RedirectToAction("Details", new { username = user.UserName });
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
