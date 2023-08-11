@@ -19,5 +19,12 @@ namespace FindMusic.Controllers
 		{
 			return View();
 		}
+
+		[HttpGet]
+		public IActionResult ListUsers()
+		{
+			var users = _userManager.Users;
+			return View(users);
+		}
 	}
 }
