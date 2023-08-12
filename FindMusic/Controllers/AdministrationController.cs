@@ -125,5 +125,26 @@ namespace FindMusic.Controllers
 		{
 			return View();
 		}
+
+		[HttpPost]
+		public async Task<IActionResult> CreateRole(CreateRoleViewModel model)
+		{
+			if (!ModelState.IsValid) return View(model);
+
+			var identityRole = new IdentityRole { Name = model.RoleName };
+			var result = await _roleManager.CreateAsync(identityRole);
+
+			if (result.Succeeded)
+			{
+				return RedirectToAction("Index");
+			}
+
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError(string.Empty, error.Description);
+			}
+
+			return View(model);
+		}
 	}
 }
