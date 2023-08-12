@@ -136,7 +136,7 @@ namespace FindMusic.Controllers
 
 			if (result.Succeeded)
 			{
-				return RedirectToAction("Index");
+				return RedirectToAction("ListRoles");
 			}
 
 			foreach (var error in result.Errors)
