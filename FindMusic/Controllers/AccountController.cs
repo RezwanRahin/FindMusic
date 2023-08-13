@@ -240,6 +240,12 @@ namespace FindMusic.Controllers
         }
 
         [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied()
         {
