@@ -1,10 +1,12 @@
 ﻿using FindMusic.Models;
 using FindMusic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindMusic.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	public class AdministrationController : Controller
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
