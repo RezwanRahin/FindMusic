@@ -19,9 +19,11 @@ namespace FindMusic.Repository
 			return series;
 		}
 
-		public Task<Series> Delete(Series series)
+		public async Task<Series> Delete(Series series)
 		{
-			throw new NotImplementedException();
+			_context.Series.Remove(series);
+			await _context.SaveChangesAsync();
+			return series;
 		}
 
 		public Task<IEnumerable<Series>> GetAllSeries()
