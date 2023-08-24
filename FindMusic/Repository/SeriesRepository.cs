@@ -47,9 +47,9 @@ namespace FindMusic.Repository
 						.ToListAsync();
 		}
 
-		public Task<Series> GetSeriesById(int id)
+		public async Task<Series?> GetSeriesById(int id)
 		{
-			throw new NotImplementedException();
+			return await _context.Series.FindAsync(id);
 		}
 
 		public Task<Series> GetSeriesBySlug(string slug)
