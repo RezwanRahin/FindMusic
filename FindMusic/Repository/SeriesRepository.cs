@@ -88,9 +88,11 @@ namespace FindMusic.Repository
 			}
 		}
 
-		public Task<Series> Update(Series modifiedSeries)
+		public async Task<Series> Update(Series modifiedSeries)
 		{
-			throw new NotImplementedException();
+			_context.Series.Update(modifiedSeries);
+			await _context.SaveChangesAsync();
+			return modifiedSeries;
 		}
 	}
 }
