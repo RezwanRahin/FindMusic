@@ -12,9 +12,11 @@ namespace FindMusic.Repository
 			_context = context;
 		}
 
-		public Task<Series> Add(Series series)
+		public async Task<Series> Add(Series series)
 		{
-			throw new NotImplementedException();
+			await _context.Series.AddAsync(series);
+			await _context.SaveChangesAsync();
+			return series;
 		}
 
 		public Task<Series> Delete(Series series)
