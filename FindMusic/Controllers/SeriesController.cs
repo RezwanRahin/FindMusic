@@ -1,5 +1,7 @@
 ﻿using FindMusic.Models;
 using FindMusic.Repository;
+using FindMusic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +21,19 @@ namespace FindMusic.Controllers
 			_hostEnvironment = hostEnvironment;
 		}
 
-		public IActionResult Index()
+		[AllowAnonymous]
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			var allSeries = await _seriesRepository.GetAllSeries();
+
+			var model = allSeries.Select(series => new CardViewModel
+			{
+				Name = series.Name,
+				Slug = series.Slug,
+				PhotoPath = PosterViewModel.GetPhoto(series.PhotoPath)
+			});
+
+			return View(model);
 		}
 	}
 }
