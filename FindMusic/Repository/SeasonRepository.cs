@@ -1,5 +1,6 @@
 ﻿using FindMusic.Context;
 using FindMusic.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FindMusic.Repository
 {
@@ -26,9 +27,18 @@ namespace FindMusic.Repository
             return season;
         }
 
-        public Task<Season?> GetSeason(int number, string seriesSlug)
+        public async Task<Season?> GetSeason(int number, string seriesSlug)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Seasons
+                            .Include(s => s.Series)
+                            .SingleAsync(s => s.Series.Slug == seriesSlug && s.Number == number);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Season?> GetSeasonWithRelatedData(int id)
