@@ -78,9 +78,11 @@ namespace FindMusic.Repository
             }
         }
 
-        public Task<Season> Update(Season season)
+        public async Task<Season> Update(Season season)
         {
-            throw new NotImplementedException();
+            _context.Seasons.Update(season);
+            await _context.SaveChangesAsync();
+            return season;
         }
     }
 }
