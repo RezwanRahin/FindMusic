@@ -19,9 +19,11 @@ namespace FindMusic.Repository
             return season;
         }
 
-        public Task<Season> Delete(Season season)
+        public async Task<Season> Delete(Season season)
         {
-            throw new NotImplementedException();
+            _context.Seasons.Remove(season);
+            await _context.SaveChangesAsync();
+            return season;
         }
 
         public Task<Season?> GetSeason(int number, string seriesSlug)
