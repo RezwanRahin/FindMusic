@@ -12,9 +12,11 @@ namespace FindMusic.Repository
             _context = context;
         }
 
-        public Task<Season> Add(Season season)
+        public async Task<Season> Add(Season season)
         {
-            throw new NotImplementedException();
+            await _context.Seasons.AddAsync(season);
+            await _context.SaveChangesAsync();
+            return season;
         }
 
         public Task<Season> Delete(Season season)
