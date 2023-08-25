@@ -41,9 +41,16 @@ namespace FindMusic.Repository
             }
         }
 
-        public Task<Season?> GetSeasonWithRelatedData(int id)
+        public async Task<Season?> GetSeasonWithRelatedData(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Seasons.Include(s => s.Series).SingleAsync(s => s.Id == id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Season?> GetSeasonWithRelatedData(int number, string seriesSlug)
