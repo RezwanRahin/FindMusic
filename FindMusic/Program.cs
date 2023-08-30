@@ -1,5 +1,6 @@
 using FindMusic.Context;
 using FindMusic.Models;
+using FindMusic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 
 // Identity Service
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
+// ContextBoundObject Services
+builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 
 // Add authorization options
 builder.Services.AddAuthorization(options =>
