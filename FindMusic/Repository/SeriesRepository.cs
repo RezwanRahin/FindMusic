@@ -52,9 +52,16 @@ namespace FindMusic.Repository
 			return await _context.Series.FindAsync(id);
 		}
 
-		public Task<Series> GetSeriesBySlug(string slug)
+		public async Task<Series?> GetSeriesBySlug(string slug)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				return await _context.Series.SingleAsync(s => s.Slug == slug);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public Task<Series> GetSeriesBySlugWithRelatedData(string slug)
