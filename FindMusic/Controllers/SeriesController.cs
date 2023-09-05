@@ -35,5 +35,11 @@ namespace FindMusic.Controllers
 
 			return View(model);
 		}
+
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View();
+		}
 	}
 }
