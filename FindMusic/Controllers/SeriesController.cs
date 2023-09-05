@@ -155,5 +155,24 @@ namespace FindMusic.Controllers
 
 			return RedirectToAction("Details", new { slug = series.Slug });
 		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var series = await _seriesRepository.GetSeriesById(id);
+
+			if (series == null)
+			{
+				Response.StatusCode = 404;
+				ViewBag.ErrorMessage = $"Series with Id = {id} cannot be found";
+				return View("NotFound");
+			}
+
+			var photoPath = series.PhotoPath;
+			await _seriesRepository.Delete(series);
+			photoPath.DeleteImageFile(_hostEnvironment);
+
+			return RedirectToAction("Index");
+		}
 	}
 }
