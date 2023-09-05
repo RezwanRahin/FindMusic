@@ -100,5 +100,29 @@ namespace FindMusic.Controllers
 
 			return View(model);
 		}
+
+		[HttpGet]
+		[Route("[controller]/[action]/{slug}")]
+		public async Task<IActionResult> Update(string slug)
+		{
+			var series = await _seriesRepository.GetSeriesBySlug(slug);
+
+			if (series == null)
+			{
+				Response.StatusCode = 404;
+				ViewBag.ErrorMessage = $"Series like {slug} cannot be found";
+				return View("NotFound");
+			}
+
+			var model = new UpdateSeriesViewModel
+			{
+				Id = series.Id,
+				Name = series.Name,
+				Slug = series.Slug,
+				PhotoPath = series.PhotoPath
+			};
+
+			return View(model);
+		}
 	}
 }
