@@ -124,5 +124,36 @@ namespace FindMusic.Controllers
 
 			return View(model);
 		}
+
+		[HttpPost]
+		public async Task<IActionResult> Update(UpdateSeriesViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var series = await _seriesRepository.GetSeriesById(model.Id);
+
+			if (series == null)
+			{
+				Response.StatusCode = 404;
+				ViewBag.ErrorMessage = $"Series {model.Name} cannot be found";
+				return View("NotFound");
+			}
+
+			series.Name = model.Name;
+			series.Slug = model.Name.Slugify();
+
+			if (model.Photo != null)
+			{
+				series.PhotoPath = model.Photo.ProcessUploadedFile(_hostEnvironment);
+				model.PhotoPath?.DeleteImageFile(_hostEnvironment);
+			}
+
+			await _seriesRepository.Update(series);
+
+			return RedirectToAction("Details", new { slug = series.Slug });
+		}
 	}
 }
