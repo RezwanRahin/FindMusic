@@ -16,14 +16,14 @@
 		</div>
 		<div class="card-body">
 			<h5 class="card-title">Use the button below to create a Series</h5>
-			<a class="btn btn-primary" style="width: auto">Add Series</a>
+			<a asp-action="Create" class="btn btn-primary" style="width: auto">Add Series</a>
 		</div>
 	</div>
 }
 else
 {
 	<div class="my-4">
-		<a class="btn btn-primary mb-3" style="width: auto">Add Series</a>
+		<a asp-action="Create" class="btn btn-primary mb-3" style="width: auto">Add Series</a>
 	</div>
 
 	foreach (var series in Model)
