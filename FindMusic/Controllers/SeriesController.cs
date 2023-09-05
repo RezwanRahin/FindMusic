@@ -2,8 +2,10 @@
 using FindMusic.Repository;
 using FindMusic.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using FindMusic.ViewModels.SeriesViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using FindMusic.Extensions;
 
 namespace FindMusic.Controllers
 {
@@ -40,6 +42,30 @@ namespace FindMusic.Controllers
 		public IActionResult Create()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Create(CreateSeriesViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var user = await _userManager.GetUserAsync(User);
+
+			var series = new Series
+			{
+				Name = model.Name,
+				Slug = model.Name.Slugify(),
+				PhotoPath = model.Photo.ProcessUploadedFile(_hostEnvironment),
+				User = user,
+				ApplicationUserId = user.Id
+			};
+
+			await _seriesRepository.Add(series);
+
+			return RedirectToAction("Index");
 		}
 	}
 }
