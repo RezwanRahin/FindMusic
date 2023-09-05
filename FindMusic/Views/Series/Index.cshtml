@@ -1,0 +1,43 @@
+@model IEnumerable<CardViewModel>
+
+@{
+	ViewData["Title"] = "All Series";
+}
+
+<h1 class="text-center">
+	<b>Series</b>
+</h1>
+
+@if (!Model.Any())
+{
+	<div class="card">
+		<div class="card-header">
+			No Series created yet
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Use the button below to create a Series</h5>
+			<a class="btn btn-primary" style="width: auto">Add Series</a>
+		</div>
+	</div>
+}
+else
+{
+	<div class="my-4">
+		<a class="btn btn-primary mb-3" style="width: auto">Add Series</a>
+	</div>
+
+	foreach (var series in Model)
+	{
+		<div class="card row my-3 mx-1 d-inline-block" style="width: 210px;">
+			<div class="card-body p-0" style="height: 302px; width: 212px;">
+				<img class="card-img-top" style="height: 300px; width: 210px;" src="@series.PhotoPath" alt="@series.Name"
+					 asp-append-version="true">
+			</div>
+			<div class="card-footer" style="height: 75px;">
+				<div class="card-title text-center">
+					<a>@series.Name</a>
+				</div>
+			</div>
+		</div>
+	}
+}
