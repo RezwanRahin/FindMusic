@@ -67,5 +67,38 @@ namespace FindMusic.Controllers
 
 			return RedirectToAction("Index");
 		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		[Route("[controller]/[action]/{slug}")]
+		public async Task<IActionResult> Details(string slug)
+		{
+			var series = await _seriesRepository.GetSeriesBySlugWithRelatedData(slug);
+
+			if (series == null)
+			{
+				Response.StatusCode = 404;
+				ViewBag.ErrorMessage = $"Series like {slug} cannot be found";
+				return View("NotFound");
+			}
+
+			var model = new SeriesDetailsViewModel
+			{
+				Id = series.Id,
+				Name = series.Name,
+				Slug = series.Slug,
+				Poster = new PosterViewModel(series.PhotoPath),
+				Contributor = new ContributorViewModel(series.User),
+
+				Seasons = new List<int>()
+			};
+
+			foreach (var season in series.Seasons)
+			{
+				model.Seasons.Add(season.Number);
+			}
+
+			return View(model);
+		}
 	}
 }
