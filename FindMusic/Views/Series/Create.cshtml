@@ -1,0 +1,29 @@
+@model FindMusic.ViewModels.SeriesViewModels.CreateSeriesViewModel
+
+@{
+	ViewData["Title"] = "Create Series";
+}
+
+<div class="container mt-3">
+	<h1><br>Create Series<br></h1>
+
+	<form method="post" enctype="multipart/form-data">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<div class="form-floating mt-3 mb-3">
+			<input asp-for="Name" class="form-control" />
+			<label asp-for="Name"></label>
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+		<div class="mb-4">
+			<label asp-for="Photo">Poster Photo</label>
+			<input asp-for="Photo" class="form-control custom-file-input" />
+		</div>
+		<button type="submit" class="btn btn-primary">Create</button>
+		<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	</form>
+</div>
+
+@section Scripts
+{
+	<partial name="_ValidationScriptsPartial" />
+}
