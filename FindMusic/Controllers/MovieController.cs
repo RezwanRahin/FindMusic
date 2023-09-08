@@ -1,5 +1,7 @@
 ﻿using FindMusic.Models;
 using FindMusic.Repository;
+using FindMusic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +21,13 @@ namespace FindMusic.Controllers
             _hostEnvironment = hostEnvironment;
         }
 
-        public IActionResult Index()
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var allMovies = await _movieRepository.GetAllMovies();
+            var model = allMovies.Select(movie => new CardViewModel { Name = movie.Name, Slug = movie.Slug, PhotoPath = PosterViewModel.GetPhoto(movie.PhotoPath) }).ToList();
+
+            return View(model);
         }
     }
 }
