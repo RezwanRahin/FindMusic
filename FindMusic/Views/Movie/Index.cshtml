@@ -1,0 +1,43 @@
+@model IEnumerable<CardViewModel>
+
+@{
+	ViewData["Title"] = "All Movies";
+}
+
+<h1 class="text-center">
+	<b>Movies</b>
+</h1>
+
+@if (!Model.Any())
+{
+	<div class="card">
+		<div class="card-header">
+			No Movie created yet
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Use the button below to create a Movie</h5>
+			<a class="btn btn-primary" style="width: auto">Add Movie</a>
+		</div>
+	</div>
+}
+else
+{
+	<div class="my-4">
+		<a class="btn btn-primary mb-3" style="width: auto">Add Movie</a>
+	</div>
+
+	foreach (var movie in Model)
+	{
+		<div class="card row mb-3 mx-1 d-inline-block">
+			<div class="card-body p-0">
+				<img class="card-img-top" style="height: 300px; width: 210px;" src="@movie.PhotoPath" alt="@movie.Name"
+					 asp-append-version="true">
+			</div>
+			<div class="card-footer">
+				<div class="card-title text-center">
+					<a href="#">Name</a>
+				</div>
+			</div>
+		</div>
+	}
+}
