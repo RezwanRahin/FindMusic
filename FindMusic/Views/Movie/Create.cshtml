@@ -1,0 +1,33 @@
+@model FindMusic.ViewModels.MovieViewModels.CreateMovieViewModel
+
+@{
+	ViewData["Title"] = "Create Movie";
+}
+
+<div class="container mt-3">
+	<h1><br>Create Movie<br></h1>
+
+	<form method="post" enctype="multipart/form-data">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<div class="form-floating mt-3 mb-4">
+			<input asp-for="Name" class="form-control" />
+			<label asp-for="Name"></label>
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+		<div class="form-floating mt-3 mb-3">
+			<input asp-for="ReleaseDate" class="form-control" />
+			<label asp-for="ReleaseDate"></label>
+			<span asp-validation-for="ReleaseDate" class="text-danger"></span>
+		</div>
+		<div class="my-3">
+			<label asp-for="Photo">Poster Photo</label>
+			<input asp-for="Photo" class="form-control custom-file-input" />
+		</div>
+		<button type="submit" class="btn btn-primary">Create</button>
+	</form>
+</div>
+
+@section Scripts
+{
+	<partial name="_ValidationScriptsPartial" />
+}
