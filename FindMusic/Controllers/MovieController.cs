@@ -1,7 +1,9 @@
-﻿using FindMusic.Models;
+﻿using FindMusic.Extensions;
+using FindMusic.Models;
 using FindMusic.Repository;
 using FindMusic.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using FindMusic.ViewModels.MovieViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +36,30 @@ namespace FindMusic.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateMovieViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var movie = new Movie
+            {
+                Name = model.Name,
+                ReleaseDate = model.ReleaseDate,
+                Slug = model.Name.Slugify(),
+                PhotoPath = model.Photo.ProcessUploadedFile(_hostEnvironment),
+                User = user,
+            };
+
+            await _movieRepository.Add(movie);
+
+            return RedirectToAction("Index");
         }
     }
 }
