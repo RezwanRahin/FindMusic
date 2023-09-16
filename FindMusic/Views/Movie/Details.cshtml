@@ -1,0 +1,48 @@
+@model FindMusic.ViewModels.MovieViewModels.MovieDetailsViewModel
+
+@{
+	ViewData["Title"] = Model.Name;
+}
+
+<div class="container mt-3">
+	<h1 class="text-center">
+		<b>Movie Details</b>
+	</h1>
+
+	<div class="card">
+		<div class="card-body row">
+			<img class="card-img-top col-6 poster" src="@Model.Poster.PhotoPath" alt="@Model.Name" asp-append-version="true" />
+			<div class="col-6">
+				<h4 class="card-title"><i>Title</i>: @Model.Name</h4><br>
+				<h6><i>Release Date</i>: @Model.ReleaseDate.ToString("dd MMMM yyyy")</h6>
+				<p>
+					<h6>
+						<i>Added By</i>:
+						<partial name="_Contributor" model="Model.Contributor" />
+					</h6>
+				</p>
+
+			</div>
+		</div>
+		<div class="card-footer">
+			<form method="post">
+				<a class="btn btn-primary" style="width: 80px">Update</a>
+
+				<span id="confirmDeleteSpan_@Model.Id" style="display: none">
+					<span>Are you sure you want to delete?</span>
+					<button type="submit" class="btn btn-danger">Yes</button>
+					<a href="#" class="btn btn-primary" onclick="confirmDelete('@Model.Id', false)">No</a>
+				</span>
+
+				<span id="deleteSpan_@Model.Id">
+					<a href="#" class="btn btn-danger" onclick="confirmDelete('@Model.Id', true)">Delete</a>
+				</span>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	<script src="~/js/site.js"></script>
+}
