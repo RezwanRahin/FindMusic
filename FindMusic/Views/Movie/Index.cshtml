@@ -16,14 +16,14 @@
 		</div>
 		<div class="card-body">
 			<h5 class="card-title">Use the button below to create a Movie</h5>
-			<a class="btn btn-primary" style="width: auto">Add Movie</a>
+			<a asp-action="Create" class="btn btn-primary" style="width: auto">Add Movie</a>
 		</div>
 	</div>
 }
 else
 {
 	<div class="my-4">
-		<a class="btn btn-primary mb-3" style="width: auto">Add Movie</a>
+		<a asp-action="Create" class="btn btn-primary mb-3" style="width: auto">Add Movie</a>
 	</div>
 
 	foreach (var movie in Model)
