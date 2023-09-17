@@ -88,5 +88,30 @@ namespace FindMusic.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        [Route("[controller]/[action]/{slug?}")]
+        public async Task<IActionResult> Update(string slug)
+        {
+            var movie = await _movieRepository.GetMovieBySlug(slug);
+
+            if (movie == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Movie like {slug} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new UpdateMovieViewModel
+            {
+                Id = movie.Id,
+                Name = movie.Name,
+                Slug = movie.Slug,
+                ReleaseDate = movie.ReleaseDate,
+                PhotoPath = movie.PhotoPath
+            };
+
+            return View(model);
+        }
     }
 }
