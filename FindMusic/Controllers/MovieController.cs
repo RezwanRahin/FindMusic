@@ -113,5 +113,37 @@ namespace FindMusic.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateMovieViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var movie = await _movieRepository.GetMovieById(model.Id);
+
+            if (movie == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Movie {model.Name} cannot be found";
+                return View("NotFound");
+            }
+
+            movie.Name = model.Name;
+            movie.Slug = model.Name.Slugify();
+            movie.ReleaseDate = model.ReleaseDate;
+
+            if (model.Photo != null)
+            {
+                movie.PhotoPath = model.Photo.ProcessUploadedFile(_hostEnvironment);
+                model.PhotoPath?.DeleteImageFile(_hostEnvironment);
+            }
+
+            await _movieRepository.Update(movie);
+
+            return RedirectToAction("Details", new { slug = movie.Slug });
+        }
     }
 }
