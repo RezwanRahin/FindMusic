@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="card-footer">
-			<form method="post">
+			<form method="post" asp-action="Delete" asp-route-id="@Model.Id">
 				<a asp-action="Update" asp-route-slug="@Model.Slug" class="btn btn-primary"
 				   style="width: 80px">Update</a>
 
