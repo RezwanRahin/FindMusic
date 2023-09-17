@@ -145,5 +145,20 @@ namespace FindMusic.Controllers
 
             return RedirectToAction("Details", new { slug = movie.Slug });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var movie = await _movieRepository.GetMovieById(id);
+
+            if (movie != null)
+            {
+                var photoPath = movie.PhotoPath;
+                await _movieRepository.Delete(movie);
+                photoPath.DeleteImageFile(_hostEnvironment);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
