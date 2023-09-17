@@ -26,7 +26,8 @@
 		</div>
 		<div class="card-footer">
 			<form method="post">
-				<a class="btn btn-primary" style="width: 80px">Update</a>
+				<a asp-action="Update" asp-route-slug="@Model.Slug" class="btn btn-primary"
+				   style="width: 80px">Update</a>
 
 				<span id="confirmDeleteSpan_@Model.Id" style="display: none">
 					<span>Are you sure you want to delete?</span>
