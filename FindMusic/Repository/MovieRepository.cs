@@ -1,9 +1,17 @@
-﻿using FindMusic.Models;
+﻿using FindMusic.Context;
+using FindMusic.Models;
 
 namespace FindMusic.Repository
 {
 	public class MovieRepository : IMovieRepository
 	{
+		private readonly AppDbContext _context;
+
+		public MovieRepository(AppDbContext context)
+		{
+			_context = context;
+		}
+
 		public Task<Movie> Add(Movie movie)
 		{
 			throw new NotImplementedException();
