@@ -15,5 +15,21 @@
 
 			return uniqueFileName;
 		}
+
+		public static void DeleteImageFile(this string filePath, IWebHostEnvironment hostEnvironment)
+		{
+			filePath = Path.Combine(hostEnvironment.WebRootPath, "images", filePath);
+
+			try
+			{
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+				File.Delete(filePath);
+			}
+			catch (Exception e)
+			{
+				// ignored
+			}
+		}
 	}
 }
