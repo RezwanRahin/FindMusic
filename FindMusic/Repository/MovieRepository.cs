@@ -99,9 +99,11 @@ namespace FindMusic.Repository
 			}
 		}
 
-		public Task<Movie> Update(Movie modifiedMovie)
+		public async Task<Movie> Update(Movie modifiedMovie)
 		{
-			throw new NotImplementedException();
+			_context.Movies.Update(modifiedMovie);
+			await _context.SaveChangesAsync();
+			return modifiedMovie;
 		}
 	}
 }
