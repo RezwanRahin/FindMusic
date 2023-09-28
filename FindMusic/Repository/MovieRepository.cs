@@ -19,9 +19,11 @@ namespace FindMusic.Repository
 			return movie;
 		}
 
-		public Task<Movie> Delete(Movie movie)
+		public async Task<Movie> Delete(Movie movie)
 		{
-			throw new NotImplementedException();
+			_context.Movies.Remove(movie);
+			await _context.SaveChangesAsync();
+			return movie;
 		}
 
 		public Task<IEnumerable<Movie>> GetAllMovies()
