@@ -52,9 +52,17 @@ namespace FindMusic.Repository
 			}
 		}
 
-		public Task<Movie?> GetMovieBySlug(string slug)
+		public async Task<Movie?> GetMovieBySlug(string slug)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				return await _context.Movies.SingleAsync(s => s.Slug == slug);
+
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public Task<Movie?> GetMovieWithRelatedData(string slug)
