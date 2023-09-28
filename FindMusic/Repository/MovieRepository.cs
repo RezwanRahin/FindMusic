@@ -12,9 +12,11 @@ namespace FindMusic.Repository
 			_context = context;
 		}
 
-		public Task<Movie> Add(Movie movie)
+		public async Task<Movie> Add(Movie movie)
 		{
-			throw new NotImplementedException();
+			await _context.Movies.AddAsync(movie);
+			await _context.SaveChangesAsync();
+			return movie;
 		}
 
 		public Task<Movie> Delete(Movie movie)
