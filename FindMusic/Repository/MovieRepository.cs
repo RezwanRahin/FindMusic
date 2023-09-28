@@ -1,5 +1,6 @@
 ﻿using FindMusic.Context;
 using FindMusic.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FindMusic.Repository
 {
@@ -26,9 +27,9 @@ namespace FindMusic.Repository
 			return movie;
 		}
 
-		public Task<IEnumerable<Movie>> GetAllMovies()
+		public async Task<IEnumerable<Movie>> GetAllMovies()
 		{
-			throw new NotImplementedException();
+			return await _context.Movies.ToListAsync();
 		}
 
 		public Task<IEnumerable<Movie>> GetLatestMovies()
