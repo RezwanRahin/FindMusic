@@ -40,9 +40,16 @@ namespace FindMusic.Repository
 						.ToListAsync();
 		}
 
-		public Task<Movie?> GetMovieById(int id)
+		public async Task<Movie?> GetMovieById(int id)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				return await _context.Movies.FindAsync(id);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public Task<Movie?> GetMovieBySlug(string slug)
