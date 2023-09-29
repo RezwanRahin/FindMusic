@@ -59,7 +59,7 @@ namespace FindMusic.Controllers
 
             await _movieRepository.Add(movie);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { slug = movie.Slug });
         }
 
         [HttpGet]
