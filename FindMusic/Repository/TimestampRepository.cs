@@ -1,9 +1,17 @@
-﻿using FindMusic.Models;
+﻿using FindMusic.Context;
+using FindMusic.Models;
 
 namespace FindMusic.Repository
 {
     public class TimestampRepository : ITimestampRepository
     {
+        private readonly AppDbContext _context;
+
+        public TimestampRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public Task<Timestamp> Add(Timestamp timestamp)
         {
             throw new NotImplementedException();
