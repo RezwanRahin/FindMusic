@@ -12,9 +12,11 @@ namespace FindMusic.Repository
             _context = context;
         }
 
-        public Task<Timestamp> Add(Timestamp timestamp)
+        public async Task<Timestamp> Add(Timestamp timestamp)
         {
-            throw new NotImplementedException();
+            await _context.Timestamps.AddAsync(timestamp);
+            await _context.SaveChangesAsync();
+            return timestamp;
         }
 
         public Task<Timestamp> Delete(Timestamp timestamp)
