@@ -19,9 +19,11 @@ namespace FindMusic.Repository
             return timestamp;
         }
 
-        public Task<Timestamp> Delete(Timestamp timestamp)
+        public async Task<Timestamp> Delete(Timestamp timestamp)
         {
-            throw new NotImplementedException();
+            _context.Timestamps.Remove(timestamp);
+            await _context.SaveChangesAsync();
+            return timestamp;
         }
 
         public Task<Timestamp?> GetTimestamp(int id)
