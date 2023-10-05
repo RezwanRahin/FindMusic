@@ -26,9 +26,9 @@ namespace FindMusic.Repository
             return timestamp;
         }
 
-        public Task<Timestamp?> GetTimestamp(int id)
+        public async Task<Timestamp?> GetTimestamp(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Timestamps.FindAsync(id);
         }
 
         public Task<Timestamp?> GetTimestampWithEpisodeData(int id)
