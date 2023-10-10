@@ -65,7 +65,7 @@ namespace FindMusic.Controllers
 
 			await _seriesRepository.Add(series);
 
-			return RedirectToAction("Index");
+			return RedirectToAction("Details", new { slug = series.Slug });
 		}
 
 		[HttpGet]
