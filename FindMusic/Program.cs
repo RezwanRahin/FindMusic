@@ -22,6 +22,7 @@ builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
 builder.Services.AddScoped<IEpisodeRepository, EpisodeRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ITimestampRepository, TimestampRepository>();
 
 // Add authorization options
 builder.Services.AddAuthorization(options =>
