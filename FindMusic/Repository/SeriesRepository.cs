@@ -64,9 +64,28 @@ namespace FindMusic.Repository
 			}
 		}
 
-		public Task<Series> GetSeriesBySlugWithRelatedData(string slug)
+		public async Task<Series?> GetSeriesBySlugWithRelatedData(string slug)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				return await _context.Series
+							.Include(s => s.User)
+							.Include(s => s.Seasons)
+							.Select(s => new Series
+							{
+								Id = s.Id,
+								Name = s.Name,
+								Slug = s.Slug,
+								PhotoPath = s.PhotoPath,
+								User = s.User,
+								Seasons = s.Seasons.OrderBy(s => s.Number).ToList()
+							})
+							.SingleAsync(s => s.Slug == slug);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public Task<Series> Update(Series modifiedSeries)
