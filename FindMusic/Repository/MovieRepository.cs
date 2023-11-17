@@ -65,9 +65,38 @@ namespace FindMusic.Repository
 			}
 		}
 
-		public Task<Movie?> GetMovieWithRelatedData(string slug)
+		public async Task<Movie?> GetMovieWithRelatedData(string slug)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				return await _context.Movies
+							.Include(m => m.User)
+							.Include(m => m.Timestamps)
+							.ThenInclude(t => t.User)
+							.Include(m => m.Timestamps)
+							.ThenInclude(t => t.Tracks)
+							.ThenInclude(t => t.User)
+							.Select(m => new Movie
+							{
+								Id = m.Id,
+								Name = m.Name,
+								ReleaseDate = m.ReleaseDate,
+								Slug = m.Slug,
+								PhotoPath = m.PhotoPath,
+								User = m.User,
+								Timestamps = m.Timestamps
+											.OrderBy(t => t.Hour)
+											.ThenBy(t => t.Minute)
+											.ThenBy(t => t.Second)
+											.ToList()
+							})
+							.SingleAsync(s => s.Slug == slug);
+
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public Task<Movie> Update(Movie modifiedMovie)
