@@ -32,9 +32,12 @@ namespace FindMusic.Repository
 			return await _context.Movies.ToListAsync();
 		}
 
-		public Task<IEnumerable<Movie>> GetLatestMovies()
+		public async Task<IEnumerable<Movie>> GetLatestMovies()
 		{
-			throw new NotImplementedException();
+			return await _context.Movies
+						.OrderBy(m => m.ReleaseDate)
+						.Take(10)
+						.ToListAsync();
 		}
 
 		public Task<Movie?> GetMovieById(int id)
