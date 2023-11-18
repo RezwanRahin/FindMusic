@@ -32,9 +32,19 @@ namespace FindMusic.Repository
 			return await _context.Series.ToListAsync();
 		}
 
-		public Task<IEnumerable<Series>> GetLatestSeries()
+		public async Task<IEnumerable<Series>> GetLatestSeries()
 		{
-			throw new NotImplementedException();
+			return await _context.Series
+						.Include(s => s.Seasons)
+						.Select(s => new Series
+						{
+							Name = s.Name,
+							Slug = s.Slug,
+							PhotoPath = s.PhotoPath,
+							Seasons = s.Seasons.OrderBy(s => s.Year).ToList()
+						})
+						.Take(10)
+						.ToListAsync();
 		}
 
 		public Task<Series> GetSeriesById(int id)
