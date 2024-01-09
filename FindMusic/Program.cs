@@ -20,6 +20,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 // ContextBoundObject Services
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
+builder.Services.AddScoped<IEpisodeRepository, EpisodeRepository>();
 
 // Add authorization options
 builder.Services.AddAuthorization(options =>
