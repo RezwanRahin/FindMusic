@@ -48,5 +48,36 @@ namespace FindMusic.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateSeasonViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var series = await _seriesRepository.GetSeriesBySlug(model.SeriesSlug);
+            if (series == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Series like {model.SeriesSlug} cannot be found";
+                return View("NotFound");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var season = new Season
+            {
+                Number = model.Number,
+                Year = model.Year,
+                Series = series,
+                User = user
+            };
+
+            await _seasonRepository.Add(season);
+
+            return RedirectToAction("Details", "Series", new { slug = series.Slug });
+        }
     }
 }
