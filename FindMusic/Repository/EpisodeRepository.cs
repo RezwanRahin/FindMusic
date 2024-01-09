@@ -1,5 +1,6 @@
 using FindMusic.Context;
 using FindMusic.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FindMusic.Repository
 {
@@ -26,9 +27,20 @@ namespace FindMusic.Repository
             return episode;
         }
 
-        public Task<Episode?> GetEpisode(int number, int season, string seriesSlug)
+        public async Task<Episode?> GetEpisode(int number, int season, string seriesSlug)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Episodes
+                            .Include(e => e.User)
+                            .Include(e => e.Season)
+                            .ThenInclude(s => s.Series)
+                            .SingleAsync(e => e.Number == number && e.Season.Number == season && e.Season.Series.Slug == seriesSlug);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Episode?> GetEpisodeWithRelatedData(int id)
