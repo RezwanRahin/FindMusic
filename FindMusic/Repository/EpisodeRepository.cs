@@ -58,9 +58,25 @@ namespace FindMusic.Repository
             }
         }
 
-        public Task<Episode?> GetEpisodeWithRelatedData(int number, int season, string seriesSlug)
+        public async Task<Episode?> GetEpisodeWithRelatedData(int number, int season, string seriesSlug)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Episodes
+                            .Include(e => e.User)
+                            .Include(e => e.Timestamps)
+                            .ThenInclude(t => t.User)
+                            .Include(e => e.Timestamps)
+                            .ThenInclude(e => e.Tracks)
+                            .ThenInclude(t => t.User)
+                            .Include(e => e.Season)
+                            .ThenInclude(s => s.Series)
+                            .SingleAsync(e => e.Number == number && e.Season.Number == season && e.Season.Series.Slug == seriesSlug);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Episode> Update(Episode episode)
