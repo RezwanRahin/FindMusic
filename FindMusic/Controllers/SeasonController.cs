@@ -18,5 +18,13 @@ namespace FindMusic.Controllers
             _seasonRepository = seasonRepository;
             _userManager = userManager;
         }
+
+        [HttpGet]
+        [HttpPost]
+        public async Task<IActionResult> DoesNumberExist(string seriesSlug, int number)
+        {
+            var season = await _seasonRepository.GetSeason(number, seriesSlug);
+            return season == null ? Json(true) : Json($"Season with Number = {number} already exists!");
+        }
     }
 }
