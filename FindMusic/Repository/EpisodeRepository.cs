@@ -12,9 +12,11 @@ namespace FindMusic.Repository
             _context = context;
         }
 
-        public Task<Episode> Add(Episode episode)
+        public async Task<Episode> Add(Episode episode)
         {
-            throw new NotImplementedException();
+            await _context.Episodes.AddAsync(episode);
+            await _context.SaveChangesAsync();
+            return episode;
         }
 
         public Task<Episode> Delete(Episode episode)
