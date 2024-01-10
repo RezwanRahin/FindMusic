@@ -1,6 +1,8 @@
 ﻿using FindMusic.Models;
 using FindMusic.Repository;
+using FindMusic.ViewModels;
 using FindMusic.ViewModels.SeasonViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -78,6 +80,45 @@ namespace FindMusic.Controllers
             await _seasonRepository.Add(season);
 
             return RedirectToAction("Details", "Series", new { slug = series.Slug });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("[controller]/{seriesSlug}/[action]/season-{number:int}")]
+        public async Task<IActionResult> Details(string seriesSlug, int number)
+        {
+            var season = await _seasonRepository.GetSeasonWithRelatedData(number, seriesSlug);
+
+            if (season == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Season with Number = {number} & Series like {seriesSlug} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new SeasonDetailsViewModel
+            {
+                Id = season.Id,
+                Number = season.Number,
+                Year = season.Year.Year,
+                Contributor = new ContributorViewModel(season.User),
+
+                Series = new RelatedSeriesViewModel
+                {
+                    Name = season.Series.Name,
+                    Slug = season.Series.Slug,
+                    Poster = new PosterViewModel(season.Series.PhotoPath)
+                },
+
+                Episodes = new List<int>()
+            };
+
+            foreach (var episode in season.Episodes)
+            {
+                model.Episodes.Add(episode.Number);
+            }
+
+            return View(model);
         }
     }
 }
