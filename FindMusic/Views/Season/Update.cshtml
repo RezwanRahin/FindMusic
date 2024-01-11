@@ -1,0 +1,24 @@
+@model FindMusic.ViewModels.SeasonViewModels.UpdateSeasonViewModel
+
+@{
+	ViewData["Title"] = "Update Season";
+}
+
+<div class="container mt-3">
+	<h1><br>@Model.SeriesName</h1>
+	<h2><br>Update Season<br></h2>
+
+	<form method="post">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<input hidden asp-for="Id">
+		<partial name="_SeasonFormFields" model="Model" />
+		<button type="submit" class="btn btn-primary">Update</button>
+		<a asp-action="Details" asp-route-seriesSlug="@Model.SeriesSlug" asp-route-number="@Model.Number"
+		   class="btn btn-secondary d-inline-block">Cancel</a>
+	</form>
+</div>
+
+@section Scripts
+{
+	<partial name="_ValidationScriptsPartial" />
+}
