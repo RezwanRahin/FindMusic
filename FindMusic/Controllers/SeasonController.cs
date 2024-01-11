@@ -120,5 +120,29 @@ namespace FindMusic.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(string seriesSlug, int number)
+        {
+            var season = await _seasonRepository.GetSeason(number, seriesSlug);
+
+            if (season == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Season with Number = {number} & Series like {seriesSlug} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new UpdateSeasonViewModel
+            {
+                Id = season.Id,
+                Number = season.Number,
+                Year = season.Year,
+                SeriesName = season.Series.Name,
+                SeriesSlug = season.Series.Slug
+            };
+
+            return View(model);
+        }
     }
 }
