@@ -167,5 +167,22 @@ namespace FindMusic.Controllers
 
             return RedirectToAction("Details", new { seriesSlug = model.SeriesSlug, seasonNumber = model.SeasonNumber, episodeNumber = model.Number });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var episode = await _episodeRepository.GetEpisodeWithRelatedData(id);
+
+            if (episode == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Season with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            await _episodeRepository.Delete(episode);
+
+            return RedirectToAction("Details", "Season", new { seriesSlug = episode.Season.Series.Slug, number = episode.Season.Number });
+        }
     }
 }
