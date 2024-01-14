@@ -117,5 +117,30 @@ namespace FindMusic.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(string seriesSlug, int seasonNumber, int episodeNumber)
+        {
+            var episode = await _episodeRepository.GetEpisode(episodeNumber, seasonNumber, seriesSlug);
+
+            if (episode == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Episode of Number = {episodeNumber}, with Season = {seasonNumber}, and Series like {seriesSlug} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new UpdateEpisodeViewModel
+            {
+                Id = episode.Id,
+                Number = episode.Number,
+                Name = episode.Name,
+                SeriesName = episode.Season.Series.Name,
+                SeriesSlug = episode.Season.Series.Slug,
+                SeasonNumber = episode.Season.Number
+            };
+
+            return View(model);
+        }
     }
 }
