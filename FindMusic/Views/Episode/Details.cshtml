@@ -1,0 +1,52 @@
+@model FindMusic.ViewModels.EpisodeViewModels.EpisodeDetailsViewModel
+
+@{
+	var title = Model.Series.Name + " S" + Model.SeasonNumber + " E" + Model.Number;
+	ViewData["Title"] = title;
+}
+
+<div class="container mt-3">
+	<h1 class="text-center">
+		<b>Episode Details</b>
+	</h1>
+
+	<div class="card mb-5">
+		<div class="card-body row">
+			<img class="card-img-top col-6" style="height: 300px; width: 230px" src="@Model.Series.Poster.PhotoPath"
+				 alt="@Model.Series.Name" asp-append-version="true" />
+			<div class="col-6">
+				<h4 class="card-title">Season: @Model.SeasonNumber</h4>
+				<h4 class="card-title">
+					Episode No: @Model.Number<br>
+					Episode Name: @Model.Name
+				</h4>
+				<p>
+					<h6>
+						<i>Added By</i>:
+						<partial name="_Contributor" model="Model.Contributor" />
+					</h6>
+				</p>
+			</div>
+		</div>
+		<div class="card-footer">
+			<form method="post">
+				<a class="btn btn-primary" style="width: 80px">Update</a>
+
+				<span id="confirmDeleteSpan_@Model.Id" style="display: none">
+					<span>Are you sure you want to delete?</span>
+					<button type="submit" class="btn btn-danger">Yes</button>
+					<a href="#" class="btn btn-primary" onclick="confirmDelete('@Model.Id', false)">No</a>
+				</span>
+
+				<span id="deleteSpan_@Model.Id">
+					<a href="#" class="btn btn-danger" onclick="confirmDelete('@Model.Id', true)">Delete</a>
+				</span>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	<script src="~/js/site.js"></script>
+}
