@@ -60,9 +60,21 @@ namespace FindMusic.Repository
             }
         }
 
-        public Task<Timestamp?> GetTimestampWithRelatedData(int id)
+        public async Task<Timestamp?> GetTimestampWithRelatedData(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Timestamps
+                            .Include(t => t.Movie)
+                            .Include(t => t.Episode)
+                            .ThenInclude(e => e!.Season)
+                            .ThenInclude(s => s.Series)
+                            .SingleAsync(t => t.Id == id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Timestamp> Update(Timestamp modifiedTimestamp)
