@@ -85,5 +85,77 @@ namespace FindMusic.Controllers
             ViewBag.ErrorMessage = $"{type} cannot be found";
             return View("NotFound");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateTimestampViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var content = model.Content;
+
+            if (content.Episode != null && content.Movie == null)
+            {
+                var episode = await _episodeRepository.GetEpisodeWithRelatedData(content.Episode.Number, content.Episode.Season, content.Episode.SeriesSlug);
+
+                if (episode == null)
+                {
+                    Response.StatusCode = 404;
+                    ViewBag.ErrorMessage = $"Episode cannot be found";
+                    return View("NotFound");
+                }
+
+                var timestamp = new Timestamp
+                {
+                    Hour = model.Hour,
+                    Minute = model.Minute,
+                    Second = model.Second,
+                    User = await _userManager.GetUserAsync(User),
+                    Episode = episode,
+                };
+
+                await _timestampRepository.Add(timestamp);
+
+                var routeValues = new
+                {
+                    seriesSlug = episode.Season.Series.Slug,
+                    seasonNumber = episode.Season.Number,
+                    episodeNumber = episode.Number
+                };
+
+                return RedirectToAction("Details", "Episode", routeValues);
+            }
+
+            else if (content.Movie != null && content.Episode == null)
+            {
+                var movie = await _movieRepository.GetMovieBySlug(content.Movie.Slug);
+
+                if (movie == null)
+                {
+                    Response.StatusCode = 404;
+                    ViewBag.ErrorMessage = $"Movie like {content.Movie.Slug} cannot be found";
+                    return View("NotFound");
+                }
+
+                var timestamp = new Timestamp
+                {
+                    Hour = model.Hour,
+                    Minute = model.Minute,
+                    Second = model.Second,
+                    User = await _userManager.GetUserAsync(User),
+                    Movie = movie,
+                };
+
+                await _timestampRepository.Add(timestamp);
+
+                return RedirectToAction("Details", "Movie", new { slug = movie.Slug });
+            }
+
+            Response.StatusCode = 404;
+            ViewBag.ErrorMessage = "Issues with content!";
+            return View("NotFound");
+        }
     }
 }
