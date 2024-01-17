@@ -77,9 +77,11 @@ namespace FindMusic.Repository
             }
         }
 
-        public Task<Timestamp> Update(Timestamp modifiedTimestamp)
+        public async Task<Timestamp> Update(Timestamp modifiedTimestamp)
         {
-            throw new NotImplementedException();
+            _context.Timestamps.Update(modifiedTimestamp);
+            await _context.SaveChangesAsync();
+            return modifiedTimestamp;
         }
     }
 }
