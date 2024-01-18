@@ -157,5 +157,64 @@ namespace FindMusic.Controllers
             ViewBag.ErrorMessage = "Issues with content!";
             return View("NotFound");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var timestamp = await _timestampRepository.GetTimestampWithRelatedData(id);
+            if (timestamp == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Timestamp with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new UpdateTimestampViewModel
+            {
+                Id = timestamp.Id,
+                Hour = timestamp.Hour,
+                Minute = timestamp.Minute,
+                Second = timestamp.Second
+            };
+
+
+            if (timestamp.Episode != null && timestamp.Movie == null)
+            {
+                var episode = timestamp.Episode;
+
+                model.Content = new ContentDetailsViewModel
+                {
+                    Episode = new RelatedEpisodeViewModel
+                    {
+                        Number = episode.Number,
+                        Season = episode.Season.Number,
+                        SeriesName = episode.Season.Series.Name,
+                        SeriesSlug = episode.Season.Series.Slug
+                    }
+                };
+
+                return View(model);
+            }
+
+            else if (timestamp.Movie != null && timestamp.Episode == null)
+            {
+                var movie = timestamp.Movie;
+
+                model.Content = new ContentDetailsViewModel
+                {
+                    Movie = new RelatedMovieViewModel
+                    {
+                        Name = movie.Name,
+                        Slug = movie.Slug
+                    }
+                };
+
+                return View(model);
+            }
+
+            Response.StatusCode = 404;
+            ViewBag.ErrorMessage = "Issues with content!";
+            return View("NotFound");
+        }
     }
 }
