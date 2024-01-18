@@ -1,0 +1,23 @@
+@model FindMusic.ViewModels.TimestampViewModels.UpdateTimestampViewModel
+
+@{
+	ViewData["Title"] = "Update Timestamp";
+}
+
+<div class="container mt-3">
+	<partial name="_ContentInfo" model="Model.Content" />
+
+	<h2><br>Update Timestamp<br></h2>
+	<form method="post" asp-action="Update">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<input hidden asp-for="Id">
+		<partial name="_TimestampFormFields" model="Model" />
+		<button type="submit" class="btn btn-primary">Update</button>
+		<partial name="_ContentDetailsButton" model="Model.Content" />
+	</form>
+</div>
+
+@section Scripts
+{
+	<partial name="_ValidationScriptsPartial" />
+}
