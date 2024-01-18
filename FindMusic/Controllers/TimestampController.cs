@@ -256,5 +256,43 @@ namespace FindMusic.Controllers
 
             return RedirectToAction("Details", "Movie", new { slug = timestamp.Movie?.Slug });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var timestamp = await _timestampRepository.GetTimestampWithRelatedData(id);
+
+            if (timestamp == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Timestamp with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            await _timestampRepository.Delete(timestamp);
+
+            if (timestamp.Episode != null)
+            {
+                var episode = timestamp.Episode;
+
+                var routeValues = new
+                {
+                    seriesSlug = episode.Season.Series.Slug,
+                    seasonNumber = episode.Season.Number,
+                    episodeNumber = episode.Number
+                };
+
+                return RedirectToAction("Details", "Episode", routeValues);
+            }
+
+            else if (timestamp.Movie != null)
+            {
+                return RedirectToAction("Details", "Movie", new { slug = timestamp.Movie.Slug });
+            }
+
+            Response.StatusCode = 404;
+            ViewBag.ErrorMessage = "Content Type cannot be found";
+            return View("NotFound");
+        }
     }
 }
