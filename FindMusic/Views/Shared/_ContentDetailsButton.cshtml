@@ -1,0 +1,12 @@
+@model FindMusic.ViewModels.ContentDetailsViewModel
+
+@if (Model.Episode != null)
+{
+	<a asp-action="Details" asp-controller="Episode" asp-route-seriesSlug="@Model.Episode.SeriesSlug"
+	   asp-route-seasonNumber="@Model.Episode.Season" asp-route-episodeNumber="@Model.Episode.Number"
+	   class="btn btn-secondary">Cancel</a>
+}
+else if (Model.Movie != null)
+{
+	<a asp-action="Details" asp-controller="Movie" asp-route-slug="@Model.Movie.Slug" class="btn btn-secondary">Cancel</a>
+}
