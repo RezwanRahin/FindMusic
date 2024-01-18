@@ -216,5 +216,45 @@ namespace FindMusic.Controllers
             ViewBag.ErrorMessage = "Issues with content!";
             return View("NotFound");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateTimestampViewModel model)
+        {
+            var timestamp = await _timestampRepository.GetTimestampWithRelatedData(model.Id);
+            if (timestamp == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Timestamp with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            if (timestamp.Episode == null && timestamp.Movie == null || timestamp.Episode != null && timestamp.Movie != null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Related content cannot be found";
+                return View("NotFound");
+            }
+
+            timestamp.Hour = model.Hour;
+            timestamp.Minute = model.Minute;
+            timestamp.Second = model.Second;
+            await _timestampRepository.Update(timestamp);
+
+            if (timestamp.Episode != null)
+            {
+                var episode = timestamp.Episode;
+
+                var routeValues = new
+                {
+                    seriesSlug = episode.Season.Series.Slug,
+                    seasonNumber = episode.Season.Number,
+                    episodeNumber = episode.Number
+                };
+
+                return RedirectToAction("Details", "Episode", routeValues);
+            }
+
+            return RedirectToAction("Details", "Movie", new { slug = timestamp.Movie?.Slug });
+        }
     }
 }
