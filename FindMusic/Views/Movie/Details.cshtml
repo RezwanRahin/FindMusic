@@ -41,6 +41,60 @@
 			</form>
 		</div>
 	</div>
+
+	@* ============== Timestamp ============== *@
+	<div class="mt-5">
+		@if (Model.Timestamps != null && !Model.Timestamps.Any())
+		{
+			<div class="card">
+				<div class="card-header">
+					No Timestamp created yet
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">Use the button below to create a Timestamp</h5>
+					<a class="btn btn-primary" style="width: auto">
+						Add Timestamp
+					</a>
+				</div>
+			</div>
+		}
+		else
+		{
+			<a class="btn btn-primary mb-4" style="width: auto">Add Timestamp</a>
+
+			if (Model.Timestamps != null)
+			{
+				foreach (var timestamp in Model.Timestamps)
+				{
+					<div class="card mt-4">
+						<div class="card-header fw-bold">
+							<partial name="_Contributor" model="timestamp.Contributor" />
+							@timestamp.Hour h : @timestamp.Minute m : @timestamp.Second s
+						</div>
+
+						<div class="card-body">
+							Tracks
+						</div>
+						<div class="card-footer">
+							<form method="post">
+								<a class="btn btn-primary">Modify</a>
+
+								<span id="confirmDeleteSpan_@timestamp.Id" style="display: none">
+									<span>Are you sure you want to delete?</span>
+									<button type="submit" class="btn btn-danger">Yes</button>
+									<a href="#" class="btn btn-primary" onclick="confirmDelete('@timestamp.Id', false)">No</a>
+								</span>
+
+								<span id="deleteSpan_@timestamp.Id">
+									<a href="#" class="btn btn-danger" onclick="confirmDelete('@timestamp.Id', true)">Delete</a>
+								</span>
+							</form>
+						</div>
+					</div>
+				}
+			}
+		}
+	</div>
 </div>
 
 @section Scripts
