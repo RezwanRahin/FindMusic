@@ -26,9 +26,16 @@ namespace FindMusic.Repository
             return track;
         }
 
-        public Task<Track?> GetTrack(int id)
+        public async Task<Track?> GetTrack(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Tracks.FindAsync(id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Track?> GetTrackWithEpisodeData(int id)
