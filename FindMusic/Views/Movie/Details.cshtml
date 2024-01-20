@@ -52,15 +52,15 @@
 				</div>
 				<div class="card-body">
 					<h5 class="card-title">Use the button below to create a Timestamp</h5>
-					<a class="btn btn-primary" style="width: auto">
-						Add Timestamp
-					</a>
+					<a asp-action="Create" asp-controller="Timestamp" asp-route-id="@Model.Id" asp-route-type="movie"
+					   class="btn btn-primary" style="width: auto">Add Timestamp</a>
 				</div>
 			</div>
 		}
 		else
 		{
-			<a class="btn btn-primary mb-4" style="width: auto">Add Timestamp</a>
+			<a asp-action="Create" asp-controller="Timestamp" asp-route-id="@Model.Id" asp-route-type="movie"
+			   class="btn btn-primary mb-4" style="width: auto">Add Timestamp</a>
 
 			if (Model.Timestamps != null)
 			{
