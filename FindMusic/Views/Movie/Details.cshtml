@@ -77,7 +77,8 @@
 						</div>
 						<div class="card-footer">
 							<form method="post">
-								<a class="btn btn-primary">Modify</a>
+								<a asp-controller="Timestamp" asp-action="Update" asp-route-id="@timestamp.Id"
+								   class="btn btn-primary">Modify</a>
 
 								<span id="confirmDeleteSpan_@timestamp.Id" style="display: none">
 									<span>Are you sure you want to delete?</span>
