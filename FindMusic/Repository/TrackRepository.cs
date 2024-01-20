@@ -64,9 +64,23 @@ namespace FindMusic.Repository
                         .SingleAsync(t => t.Id == id);
         }
 
-        public Task<Track?> GetTrackWithRelatedData(int id)
+        public async Task<Track?> GetTrackWithRelatedData(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Tracks
+                        .Include(t => t.Timestamp)
+                        .ThenInclude(t => t.Episode)
+                        .ThenInclude(e => e!.Season)
+                        .ThenInclude(s => s.Series)
+                        .Include(t => t.Timestamp)
+                        .ThenInclude(t => t.Movie)
+                        .SingleAsync(t => t.Id == id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Task<Track> Update(Track modifiedTrack)
