@@ -19,9 +19,11 @@ namespace FindMusic.Repository
             return track;
         }
 
-        public Task<Track> Delete(Track track)
+        public async Task<Track> Delete(Track track)
         {
-            throw new NotImplementedException();
+            _context.Tracks.Remove(track);
+            await _context.SaveChangesAsync();
+            return track;
         }
 
         public Task<Track?> GetTrack(int id)
