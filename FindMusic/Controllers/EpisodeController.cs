@@ -2,6 +2,7 @@
 using FindMusic.Repository;
 using FindMusic.ViewModels;
 using FindMusic.ViewModels.EpisodeViewModels;
+using FindMusic.ViewModels.TimestampViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -113,7 +114,23 @@ namespace FindMusic.Controllers
                     Slug = episode.Season.Series.Slug,
                     Poster = new PosterViewModel(episode.Season.Series.PhotoPath),
                 },
+
+                Timestamps = new List<TimestampDetailsViewModel>()
             };
+
+            foreach (var timestamp in episode.Timestamps)
+            {
+                var timestampDetailsViewModel = new TimestampDetailsViewModel
+                {
+                    Id = timestamp.Id,
+                    Hour = timestamp.Hour,
+                    Minute = timestamp.Minute,
+                    Second = timestamp.Second,
+                    Contributor = new ContributorViewModel(timestamp.User),
+                };
+
+                model.Timestamps.Add(timestampDetailsViewModel);
+            }
 
             return View(model);
         }
