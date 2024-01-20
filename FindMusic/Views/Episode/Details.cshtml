@@ -81,7 +81,7 @@
 							Tracks
 						</div>
 						<div class="card-footer">
-							<form method="post">
+							<form method="post" asp-controller="Timestamp" asp-action="Delete" asp-route-id="@timestamp.Id">
 								<a asp-controller="Timestamp" asp-action="Update" asp-route-id="@timestamp.Id"
 								   class="btn btn-primary">Modify</a>
 
