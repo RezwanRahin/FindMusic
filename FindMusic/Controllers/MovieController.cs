@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using FindMusic.ViewModels.MovieViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using FindMusic.ViewModels.TimestampViewModels;
 
 namespace FindMusic.Controllers
 {
@@ -84,7 +85,23 @@ namespace FindMusic.Controllers
                 ReleaseDate = movie.ReleaseDate,
                 Poster = new PosterViewModel(movie.PhotoPath),
                 Contributor = new ContributorViewModel(movie.User),
+
+                Timestamps = new List<TimestampDetailsViewModel>()
             };
+
+            foreach (var timestamp in movie.Timestamps)
+            {
+                var timestampDetailsViewModel = new TimestampDetailsViewModel
+                {
+                    Id = timestamp.Id,
+                    Hour = timestamp.Hour,
+                    Minute = timestamp.Minute,
+                    Second = timestamp.Second,
+                    Contributor = new ContributorViewModel(timestamp.User),
+                };
+
+                model.Timestamps.Add(timestampDetailsViewModel);
+            }
 
             return View(model);
         }
