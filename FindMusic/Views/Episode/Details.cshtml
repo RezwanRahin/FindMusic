@@ -78,7 +78,46 @@
 						</div>
 
 						<div class="card-body">
-							Tracks
+
+							@* ============== Track ============== *@
+
+							@if (timestamp.Tracks != null && !timestamp.Tracks.Any())
+							{
+								<h5 class="mb-3">->> No Track created yet</h5>
+								<a class="btn btn-primary" style="width: auto">Add Track</a>
+							}
+							else
+							{
+								if (timestamp.Tracks != null)
+								{
+									foreach (var track in timestamp.Tracks)
+									{
+										<div class="row">
+											<div class="col-7">
+												<partial name="_Contributor" model="track.Contributor" />
+												<a href="@track.Url">@track.Title</a>
+											</div>
+
+											<div class="col-5">
+												<form method="post">
+													<a class="btn btn-primary">Modify</a>
+
+													<span id="confirmDeleteSpan_@track.Id" style="display: none">
+														<span>Are you sure you want to delete?</span>
+														<button type="submit" class="btn btn-danger">Yes</button>
+														<a href="#" class="btn btn-primary" onclick="confirmDelete('@track.Id', false)">No</a>
+													</span>
+
+													<span id="deleteSpan_@track.Id">
+														<a href="#" class="btn btn-danger" onclick="confirmDelete('@track.Id', true)">Delete</a>
+													</span>
+												</form>
+											</div>
+										</div>
+										<a class="btn btn-success mt-3" style="width: auto">Add Related Track</a>
+									}
+								}
+							}
 						</div>
 						<div class="card-footer">
 							<form method="post" asp-controller="Timestamp" asp-action="Delete" asp-route-id="@timestamp.Id">
