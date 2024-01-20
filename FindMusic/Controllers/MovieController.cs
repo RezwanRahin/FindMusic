@@ -7,6 +7,7 @@ using FindMusic.ViewModels.MovieViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using FindMusic.ViewModels.TimestampViewModels;
+using FindMusic.ViewModels.TrackViewModels;
 
 namespace FindMusic.Controllers
 {
@@ -98,7 +99,22 @@ namespace FindMusic.Controllers
                     Minute = timestamp.Minute,
                     Second = timestamp.Second,
                     Contributor = new ContributorViewModel(timestamp.User),
+
+                    Tracks = new List<TrackDetailsViewModel>()
                 };
+
+                foreach (var track in timestamp.Tracks)
+                {
+                    var trackDetailsViewModel = new TrackDetailsViewModel
+                    {
+                        Id = track.Id,
+                        Title = track.Title,
+                        Url = track.Url,
+                        Contributor = new ContributorViewModel(track.User),
+                    };
+
+                    timestampDetailsViewModel.Tracks.Add(trackDetailsViewModel);
+                }
 
                 model.Timestamps.Add(timestampDetailsViewModel);
             }
