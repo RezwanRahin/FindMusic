@@ -83,9 +83,11 @@ namespace FindMusic.Repository
             }
         }
 
-        public Task<Track> Update(Track modifiedTrack)
+        public async Task<Track> Update(Track modifiedTrack)
         {
-            throw new NotImplementedException();
+            _context.Tracks.Update(modifiedTrack);
+            await _context.SaveChangesAsync();
+            return modifiedTrack;
         }
     }
 }
