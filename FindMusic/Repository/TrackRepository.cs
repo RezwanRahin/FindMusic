@@ -1,9 +1,17 @@
-﻿using FindMusic.Models;
+﻿using FindMusic.Context;
+using FindMusic.Models;
 
 namespace FindMusic.Repository
 {
     public class TrackRepository : ITrackRepository
     {
+        private readonly AppDbContext _context;
+
+        public TrackRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public Task<Track> Add(Track track)
         {
             throw new NotImplementedException();
