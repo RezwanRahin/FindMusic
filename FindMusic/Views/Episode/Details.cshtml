@@ -100,7 +100,7 @@
 											</div>
 
 											<div class="col-5">
-												<form method="post">
+												<form method="post" asp-controller="Track" asp-action="Delete" asp-route-id="@track.Id">
 													<a asp-controller="Track" asp-action="Update" asp-route-id="@track.Id"
 													   class="btn btn-primary">Modify</a>
 
