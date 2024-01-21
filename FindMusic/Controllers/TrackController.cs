@@ -194,5 +194,53 @@ namespace FindMusic.Controllers
             ViewBag.ErrorMessage = "Issue with content";
             return View("NotFound");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateTrackViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var track = await _trackRepository.GetTrackWithRelatedData(model.Id);
+
+            if (track == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Track of Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            track.Title = model.Title;
+            track.Url = model.Url;
+
+            var content = model.Content;
+            var timestamp = track.Timestamp;
+
+            if (content.Episode != null && timestamp.Episode != null)
+            {
+                await _trackRepository.Update(track);
+
+                var routeValues = new
+                {
+                    seriesSlug = timestamp.Episode.Season.Series.Slug,
+                    seasonNumber = timestamp.Episode.Season.Number,
+                    episodeNumber = timestamp.Episode.Number
+                };
+
+                return RedirectToAction("Details", "Episode", routeValues);
+            }
+
+            else if (content.Movie != null && timestamp.Movie != null)
+            {
+                await _trackRepository.Update(track);
+                return RedirectToAction("Details", "Movie", new { slug = timestamp.Movie.Slug });
+            }
+
+            Response.StatusCode = 404;
+            ViewBag.ErrorMessage = "Issue with content";
+            return View("NotFound");
+        }
     }
 }
