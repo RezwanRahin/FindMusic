@@ -96,7 +96,8 @@
 
 											<div class="col-5">
 												<form method="post">
-													<a class="btn btn-primary">Modify</a>
+													<a asp-controller="Track" asp-action="Update" asp-route-id="@track.Id"
+													   class="btn btn-primary">Modify</a>
 
 													<span id="confirmDeleteSpan_@track.Id" style="display: none">
 														<span>Are you sure you want to delete?</span>
