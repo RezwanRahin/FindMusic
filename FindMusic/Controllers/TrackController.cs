@@ -78,5 +78,57 @@ namespace FindMusic.Controllers
             ViewBag.ErrorMessage = "Issue with content";
             return View("NotFound");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateTrackViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var timestamp = await _timestampRepository.GetTimestampWithRelatedData(model.Timestamp.Id);
+
+            if (timestamp == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Timestamp of Id = {model.Timestamp.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            var track = new Track
+            {
+                Title = model.Title,
+                Url = model.Url,
+                Timestamp = timestamp,
+                User = await _userManager.GetUserAsync(User),
+            };
+
+            var content = model.Content;
+
+            if (content.Episode != null && timestamp.Episode != null)
+            {
+                await _trackRepository.Add(track);
+
+                var routeValues = new
+                {
+                    seriesSlug = timestamp.Episode.Season.Series.Slug,
+                    seasonNumber = timestamp.Episode.Season.Number,
+                    episodeNumber = timestamp.Episode.Number
+                };
+
+                return RedirectToAction("Details", "Episode", routeValues);
+            }
+
+            else if (content.Movie != null && timestamp.Movie != null)
+            {
+                await _trackRepository.Add(track);
+                return RedirectToAction("Details", "Movie", new { slug = timestamp.Movie.Slug });
+            }
+
+            Response.StatusCode = 404;
+            ViewBag.ErrorMessage = "Issue with content";
+            return View("NotFound");
+        }
     }
 }
