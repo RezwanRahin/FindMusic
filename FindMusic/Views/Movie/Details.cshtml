@@ -79,7 +79,8 @@
 							@if (timestamp.Tracks != null && !timestamp.Tracks.Any())
 							{
 								<h5 class="mb-3">->> No Track created yet</h5>
-								<a class="btn btn-primary" style="width: auto">Add Track</a>
+								<a asp-controller="Track" asp-action="Create" asp-route-timestampId="@timestamp.Id"
+								   class="btn btn-primary" style="width: auto">Add Track</a>
 							}
 							else
 							{
