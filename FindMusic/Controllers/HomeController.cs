@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using FindMusic.Models;
 using Microsoft.AspNetCore.Authorization;
 using FindMusic.Repository;
+using FindMusic.ViewModels;
 
 namespace FindMusic.Controllers
 {
@@ -20,9 +21,40 @@ namespace FindMusic.Controllers
             _seriesRepository = seriesRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var movies = await _movieRepository.GetLatestMovies();
+            var series = await _seriesRepository.GetLatestSeries();
+
+            var model = new LatestContentViewModel
+            {
+                Movies = new List<CardViewModel>(),
+                Series = new List<CardViewModel>()
+            };
+
+            foreach (var movie in movies)
+            {
+                var card = new CardViewModel
+                {
+                    Name = movie.Name,
+                    Slug = movie.Slug,
+                    PhotoPath = PosterViewModel.GetPhoto(movie.PhotoPath)
+                };
+                model.Movies.Add(card);
+            }
+
+            foreach (var s in series)
+            {
+                var card = new CardViewModel
+                {
+                    Name = s.Name,
+                    Slug = s.Slug,
+                    PhotoPath = PosterViewModel.GetPhoto(s.PhotoPath)
+                };
+                model.Series.Add(card);
+            }
+
+            return View(model);
         }
 
         public IActionResult Privacy()
