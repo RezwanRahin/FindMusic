@@ -1,0 +1,11 @@
+@model FindMusic.ViewModels.ContentDetailsViewModel
+
+
+@if (Model.Episode != null)
+{
+	<h1>@Model.Episode.SeriesName | Season @Model.Episode.Season | Episode @Model.Episode.Number</h1>
+}
+else if (Model.Movie != null)
+{
+	<h1>@Model.Movie.Name</h1>
+}
