@@ -242,5 +242,44 @@ namespace FindMusic.Controllers
             ViewBag.ErrorMessage = "Issue with content";
             return View("NotFound");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var track = await _trackRepository.GetTrackWithMovieData(id);
+
+            if (track == null)
+            {
+                Response.StatusCode = 404;
+                ViewBag.ErrorMessage = $"Track of Id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            var timestamp = track.Timestamp;
+
+            if (timestamp.Episode != null)
+            {
+                await _trackRepository.Delete(track);
+
+                var routeValues = new
+                {
+                    seriesSlug = timestamp.Episode.Season.Series.Slug,
+                    seasonNumber = timestamp.Episode.Season.Number,
+                    episodeNumber = timestamp.Episode.Number
+                };
+
+                return RedirectToAction("Details", "Episode", routeValues);
+            }
+
+            else if (timestamp.Movie != null)
+            {
+                await _trackRepository.Delete(track);
+                return RedirectToAction("Details", "Movie", new { slug = timestamp.Movie.Slug });
+            }
+
+            Response.StatusCode = 404;
+            ViewBag.ErrorMessage = "Issue with content";
+            return View("NotFound");
+        }
     }
 }
