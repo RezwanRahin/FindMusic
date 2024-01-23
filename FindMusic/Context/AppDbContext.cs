@@ -19,5 +19,21 @@ namespace FindMusic.Context
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Donation> Donations { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Movie>()
+                .HasMany(m => m.Timestamps)
+                .WithOne(t => t.Movie)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Episode>()
+                .HasMany(e => e.Timestamps)
+                .WithOne(t => t.Episode)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
