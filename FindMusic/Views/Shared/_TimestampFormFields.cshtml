@@ -1,0 +1,35 @@
+@model FindMusic.ViewModels.TimestampViewModels.CreateTimestampViewModel
+
+<input hidden asp-for="Type">
+
+@if (Model.Content.Episode != null)
+{
+	<input hidden asp-for="Content.Episode!.SeriesName">
+	<input hidden asp-for="Content.Episode!.SeriesSlug">
+	<input hidden asp-for="Content.Episode!.Season">
+	<input hidden asp-for="Content.Episode!.Number">
+
+}
+else if (Model.Content.Movie != null)
+{
+	<input hidden asp-for="Content.Movie!.Name">
+	<input hidden asp-for="Content.Movie!.Slug">
+}
+
+<div>
+	<div class="d-inline-block form-floating mt-3 mb-4">
+		<input asp-for="Hour" class="form-control" />
+		<label asp-for="Hour"></label>
+		<span asp-validation-for="Hour" class="text-danger"></span>
+	</div>
+	<div class="d-inline-block form-floating mt-3 mb-3">
+		<input asp-for="Minute" class="form-control" />
+		<label asp-for="Minute"></label>
+		<span asp-validation-for="Minute" class="text-danger"></span>
+	</div>
+	<div class="d-inline-block form-floating mt-3 mb-3">
+		<input asp-for="Second" class="form-control" />
+		<label asp-for="Second"></label>
+		<span asp-validation-for="Second" class="text-danger"></span>
+	</div>
+</div>
