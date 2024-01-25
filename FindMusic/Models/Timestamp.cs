@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using FindMusic.Utilities;
 
 namespace FindMusic.Models
 {
+    [ExclusiveForeignKey]
     public class Timestamp
     {
         public int Id { get; set; }
