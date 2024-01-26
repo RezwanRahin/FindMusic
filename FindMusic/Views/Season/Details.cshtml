@@ -42,6 +42,40 @@
 			</form>
 		</div>
 	</div>
+
+	@* ============== Episode ============== *@
+	<div class="mt-5">
+		@if (Model.Episodes == null || !Model.Episodes.Any())
+		{
+			<div class="card">
+				<div class="card-header">
+					No Episode created yet
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">Use the button below to create an Episode</h5>
+					<a class="btn btn-primary" style="width: auto">
+						Add Episode
+					</a>
+				</div>
+			</div>
+		}
+		else
+		{
+			<a class="btn btn-primary mb-3" style="width: auto">
+				Add Episode
+			</a>
+			<div class="mt-4">
+				@foreach (var episode in Model.Episodes)
+				{
+					<a>
+						<div class="box my-4">
+							Episode @episode
+						</div>
+					</a>
+				}
+			</div>
+		}
+	</div>
 </div>
 
 @section Scripts
