@@ -21,5 +21,14 @@ namespace FindMusic.Models
         public DateTime DOB { get; set; }
 
         public string? PhotoPath { get; set; }
+
+        public ICollection<Movie> Movies { get; set; } = new List<Movie>();
+        public ICollection<Series> Series { get; set; } = new List<Series>();
+        public ICollection<Season> Seasons { get; set; } = new List<Season>();
+        public ICollection<Episode> Episodes { get; set; } = new List<Episode>();
+        public ICollection<Timestamp> Timestamps { get; set; } = new List<Timestamp>();
+        public ICollection<Track> Tracks { get; set; } = new List<Track>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Vote> Votes { get; set; } = new List<Vote>();
     }
 }
