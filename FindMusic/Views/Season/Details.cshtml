@@ -69,7 +69,8 @@
 			<div class="mt-4">
 				@foreach (var episode in Model.Episodes)
 				{
-					<a>
+					<a asp-action="Details" asp-controller="Episode" asp-route-seriesSlug="@Model.Series.Slug"
+					   asp-route-seasonNumber="@Model.Number" asp-route-episodeNumber="@episode">
 						<div class="box my-4">
 							Episode @episode
 						</div>
