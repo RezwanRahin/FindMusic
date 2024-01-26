@@ -53,7 +53,8 @@
 				</div>
 				<div class="card-body">
 					<h5 class="card-title">Use the button below to create an Episode</h5>
-					<a class="btn btn-primary" style="width: auto">
+					<a asp-action="Create" asp-controller="Episode" asp-route-seasonNumber="@Model.Number"
+					   asp-route-seriesSlug="@Model.Series.Slug" class="btn btn-primary" style="width: auto">
 						Add Episode
 					</a>
 				</div>
@@ -61,7 +62,8 @@
 		}
 		else
 		{
-			<a class="btn btn-primary mb-3" style="width: auto">
+			<a asp-action="Create" asp-controller="Episode" asp-route-seasonNumber="@Model.Number"
+			   asp-route-seriesSlug="@Model.Series.Slug" class="btn btn-primary mb-3" style="width: auto">
 				Add Episode
 			</a>
 			<div class="mt-4">
