@@ -21,3 +21,14 @@ body {
   height: 300px;
   width: 230px;
 }
+
+.box {
+  background-color: rgb(213, 233, 225);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  font-size: 30px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+}
