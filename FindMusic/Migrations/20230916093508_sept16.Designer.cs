@@ -4,6 +4,7 @@ using FindMusic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindMusic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230916093508_sept16")]
+    partial class sept16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,19 +309,13 @@ namespace FindMusic.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("EpisodeId")
+                    b.Property<DateTime>("Duration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Hour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Minute")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Second")
+                    b.Property<int>("MovieId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -333,6 +329,30 @@ namespace FindMusic.Migrations
                     b.ToTable("Timestamps");
                 });
 
+            modelBuilder.Entity("FindMusic.Models.TimestampDuration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Hour")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Minute")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimestampId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TimestampId");
+
+                    b.ToTable("TimestampDurations");
+                });
+
             modelBuilder.Entity("FindMusic.Models.Track", b =>
                 {
                     b.Property<int>("Id")
@@ -344,12 +364,12 @@ namespace FindMusic.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TimestampId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TimestampId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -601,18 +621,31 @@ namespace FindMusic.Migrations
                     b.HasOne("FindMusic.Models.Episode", "Episode")
                         .WithMany("Timestamps")
                         .HasForeignKey("EpisodeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FindMusic.Models.Movie", "Movie")
                         .WithMany("Timestamps")
                         .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Episode");
 
                     b.Navigation("Movie");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FindMusic.Models.TimestampDuration", b =>
+                {
+                    b.HasOne("FindMusic.Models.Timestamp", "Timestamp")
+                        .WithMany("TimestampDurations")
+                        .HasForeignKey("TimestampId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Timestamp");
                 });
 
             modelBuilder.Entity("FindMusic.Models.Track", b =>
@@ -622,7 +655,7 @@ namespace FindMusic.Migrations
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("FindMusic.Models.Timestamp", "Timestamp")
-                        .WithMany("Tracks")
+                        .WithMany()
                         .HasForeignKey("TimestampId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -736,7 +769,7 @@ namespace FindMusic.Migrations
 
             modelBuilder.Entity("FindMusic.Models.Timestamp", b =>
                 {
-                    b.Navigation("Tracks");
+                    b.Navigation("TimestampDurations");
                 });
 #pragma warning restore 612, 618
         }
